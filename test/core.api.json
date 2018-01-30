@@ -1,0 +1,1890 @@
+{
+  "kind": "package",
+  "name": "@eventific/core",
+  "summary": [],
+  "remarks": [],
+  "exports": {
+    "AggregateOptions": {
+      "kind": "interface",
+      "extends": "",
+      "implements": "",
+      "typeParameters": [],
+      "deprecatedMessage": [],
+      "summary": [],
+      "remarks": [],
+      "isBeta": false,
+      "members": {
+        "commandHandlers": {
+          "kind": "property",
+          "signature": "commandHandlers: Array<{\n    Command: string;\n    new(...args: any[]): ICommandHandler<any, any>;\n    _InstantiateCommandHandler(injector: Injector): ICommandHandler<any, any>;\n  }>;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "Array<{\n    Command: string;\n    new(...args: any[]): ICommandHandler<any, any>;\n    _InstantiateCommandHandler(injector: Injector): ICommandHandler<any, any>;\n  }>",
+          "deprecatedMessage": [],
+          "summary": [
+            {
+              "kind": "text",
+              "text": "The command handlers to add to this aggregate"
+            }
+          ],
+          "remarks": [],
+          "isBeta": false
+        },
+        "eventHandlers": {
+          "kind": "property",
+          "signature": "eventHandlers: Array<{\n    Event: string;\n    new(...args: any[]): IEventHandler<any, any>;\n    _InstantiateEventHandler(injector: Injector): IEventHandler<any, any>;\n  }>;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "Array<{\n    Event: string;\n    new(...args: any[]): IEventHandler<any, any>;\n    _InstantiateEventHandler(injector: Injector): IEventHandler<any, any>;\n  }>",
+          "deprecatedMessage": [],
+          "summary": [
+            {
+              "kind": "text",
+              "text": "The event handlers to add tom this aggregate"
+            }
+          ],
+          "remarks": [],
+          "isBeta": false
+        },
+        "name": {
+          "kind": "property",
+          "signature": "name: string;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "string",
+          "deprecatedMessage": [],
+          "summary": [
+            {
+              "kind": "text",
+              "text": "The name of the aggregate, should be written in PascalCase"
+            }
+          ],
+          "remarks": [],
+          "isBeta": false
+        },
+        "providers": {
+          "kind": "property",
+          "signature": "providers?: any[];",
+          "isOptional": true,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "any[]",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        }
+      }
+    },
+    "bootstrap": {
+      "kind": "function",
+      "signature": "export async function bootstrap<T>(type: {\n  Type: string;\n  _Instantiate: (injector: Injector) => Bootstrapable\n}): Promise<void> {\n  process.env.NODE_ENV = process.env.NODE_ENV || 'development';\n  const injector = new Injector();\n  injector.set({provide: Logger, useConstant: new InternalLogger()});\n  const logger = injector.get<Logger>(Logger);\n  logger.raw(chalk.green(banner));\n  logger.info(`Launching Eventific ${emoji.get('rocket')}`);\n  logger.info(`Version: ${process.env.npm_package_version || 'unknown'}`);\n  logger.info(`Environment: ${process.env.NODE_ENV} ${emoji.get('eyes')}`);\n  if (type._Instantiate) {\n    logger.info(`Type: ${type.Type}`);\n    const inst = type._Instantiate(injector);\n    logger.info(`Starting application ${emoji.get('dancer')}`);\n    await inst._start();\n  } else {\n    logger.error('The provided type does not seem to be a bootstrap able module');\n    throw new Error('Failed to start');\n  }\n}",
+      "returnValue": {
+        "type": "Promise<void>",
+        "description": []
+      },
+      "parameters": {
+        "type": {
+          "name": "type",
+          "description": [
+            {
+              "kind": "text",
+              "text": "The type to instantiate"
+            }
+          ],
+          "isOptional": false,
+          "isSpread": false,
+          "type": "{\n  Type: string;\n  _Instantiate: (injector: Injector) => Bootstrapable\n}"
+        }
+      },
+      "deprecatedMessage": [],
+      "summary": [
+        {
+          "kind": "text",
+          "text": "Bootstraps a CommandManager, ReadManager, or Saga."
+        }
+      ],
+      "remarks": [],
+      "isBeta": false
+    },
+    "Bootstrapable": {
+      "kind": "class",
+      "extends": "",
+      "implements": "",
+      "typeParameters": [],
+      "deprecatedMessage": [],
+      "summary": [],
+      "remarks": [],
+      "isBeta": true,
+      "members": {
+        "_Instantiate": {
+          "kind": "property",
+          "signature": "public _Instantiate: (injector: Injector) => Bootstrapable;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "(injector: Injector) => Bootstrapable",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": true
+        },
+        "_start": {
+          "kind": "property",
+          "signature": "public _start: () => Promise<void>;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "() => Promise<void>",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": true
+        },
+        "Type": {
+          "kind": "property",
+          "signature": "public static Type: string;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": true,
+          "type": "string",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": true
+        }
+      }
+    },
+    "ClassDependencyDefinition": {
+      "kind": "interface",
+      "extends": "",
+      "implements": "",
+      "typeParameters": [],
+      "deprecatedMessage": [],
+      "summary": [],
+      "remarks": [],
+      "isBeta": true,
+      "members": {
+        "dynamic": {
+          "kind": "property",
+          "signature": "dynamic?: true;",
+          "isOptional": true,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "true",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": true
+        },
+        "provide": {
+          "kind": "property",
+          "signature": "provide?: string | symbol | Function;",
+          "isOptional": true,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "string | symbol | Function",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": true
+        },
+        "useClass": {
+          "kind": "property",
+          "signature": "useClass: Function;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "Function",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": true
+        }
+      }
+    },
+    "CommandHandlerOptions": {
+      "kind": "interface",
+      "extends": "",
+      "implements": "",
+      "typeParameters": [],
+      "deprecatedMessage": [],
+      "summary": [],
+      "remarks": [],
+      "isBeta": false,
+      "members": {
+        "command": {
+          "kind": "property",
+          "signature": "command: string;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "string",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        }
+      }
+    },
+    "CommandMessage": {
+      "kind": "interface",
+      "extends": "",
+      "implements": "",
+      "typeParameters": [
+        "T = {}"
+      ],
+      "deprecatedMessage": [],
+      "summary": [],
+      "remarks": [],
+      "isBeta": false,
+      "members": {
+        "aggregateId": {
+          "kind": "property",
+          "signature": "aggregateId: string;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "string",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "command": {
+          "kind": "property",
+          "signature": "command: string;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "string",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "content": {
+          "kind": "property",
+          "signature": "content: T;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "T",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "header": {
+          "kind": "property",
+          "signature": "header:",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "{\n    createdBy?: string;\n    createdDate: Date;\n  }",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        }
+      }
+    },
+    "EventHandlerOptions": {
+      "kind": "interface",
+      "extends": "",
+      "implements": "",
+      "typeParameters": [],
+      "deprecatedMessage": [],
+      "summary": [],
+      "remarks": [],
+      "isBeta": false,
+      "members": {
+        "event": {
+          "kind": "property",
+          "signature": "event: string;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "string",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "schema": {
+          "kind": "property",
+          "signature": "schema?: Schema;",
+          "isOptional": true,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "Schema",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        }
+      }
+    },
+    "EventMessage": {
+      "kind": "interface",
+      "extends": "",
+      "implements": "",
+      "typeParameters": [
+        "T = undefined"
+      ],
+      "deprecatedMessage": [],
+      "summary": [],
+      "remarks": [],
+      "isBeta": false,
+      "members": {
+        "aggregateId": {
+          "kind": "property",
+          "signature": "aggregateId: string;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "string",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "content": {
+          "kind": "property",
+          "signature": "content: T;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "T",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "event": {
+          "kind": "property",
+          "signature": "event: string;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "string",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "eventId": {
+          "kind": "property",
+          "signature": "eventId: number;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "number",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "header": {
+          "kind": "property",
+          "signature": "header:",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "{\n    createdDate: Date\n  }",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        }
+      }
+    },
+    "GetEventsResult": {
+      "kind": "interface",
+      "extends": "",
+      "implements": "",
+      "typeParameters": [
+        "T"
+      ],
+      "deprecatedMessage": [],
+      "summary": [],
+      "remarks": [],
+      "isBeta": false,
+      "members": {
+        "events": {
+          "kind": "property",
+          "signature": "events: EventMessage[];",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "EventMessage[]",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "snapshot": {
+          "kind": "property",
+          "signature": "snapshot?: Snapshot<T>;",
+          "isOptional": true,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "Snapshot<T>",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        }
+      }
+    },
+    "IAggregate": {
+      "kind": "class",
+      "extends": "",
+      "implements": "",
+      "typeParameters": [],
+      "deprecatedMessage": [],
+      "summary": [
+        {
+          "kind": "text",
+          "text": "Represents a aggregate instance"
+        }
+      ],
+      "remarks": [],
+      "isBeta": false,
+      "members": {
+        "_InstantiateAggregate": {
+          "kind": "property",
+          "signature": "public static _InstantiateAggregate: (parentInjector: Injector) => IAggregate;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": true,
+          "type": "(parentInjector: Injector) => IAggregate",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "getCommandNames": {
+          "kind": "property",
+          "signature": "public getCommandNames: () => string[];",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "() => string[]",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "getEventNames": {
+          "kind": "property",
+          "signature": "public getEventNames: () => string[];",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "() => string[]",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "getState": {
+          "kind": "property",
+          "signature": "public getState: (aggregateId: string) => Promise<{version: number, state: any}>;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "(aggregateId: string) => Promise<{version: number, state: any}>",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "handleCommand": {
+          "kind": "property",
+          "signature": "public handleCommand: (commandMessage: CommandMessage) => Promise<void>;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "(commandMessage: CommandMessage) => Promise<void>",
+          "deprecatedMessage": [],
+          "summary": [
+            {
+              "kind": "text",
+              "text": "Returns a command based on the provided command message"
+            }
+          ],
+          "remarks": [],
+          "isBeta": false
+        },
+        "name": {
+          "kind": "property",
+          "signature": "public readonly name: string;",
+          "isOptional": false,
+          "isReadOnly": true,
+          "isStatic": false,
+          "type": "string",
+          "deprecatedMessage": [],
+          "summary": [
+            {
+              "kind": "text",
+              "text": "The name of this aggregate"
+            }
+          ],
+          "remarks": [],
+          "isBeta": false
+        },
+        "Name": {
+          "kind": "property",
+          "signature": "public static Name: string;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": true,
+          "type": "string",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "Type": {
+          "kind": "property",
+          "signature": "public static Type: string;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": true,
+          "type": "string",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        }
+      }
+    },
+    "ICommandHandler": {
+      "kind": "class",
+      "extends": "",
+      "implements": "",
+      "typeParameters": [
+        "T",
+        "R"
+      ],
+      "deprecatedMessage": [],
+      "summary": [],
+      "remarks": [],
+      "isBeta": false,
+      "members": {
+        "_InstantiateCommandHandler": {
+          "kind": "property",
+          "signature": "public static _InstantiateCommandHandler: (injector: Injector) => ICommandHandler<any, any>;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": true,
+          "type": "(injector: Injector) => ICommandHandler<any, any>",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "command": {
+          "kind": "property",
+          "signature": "public readonly command: string;",
+          "isOptional": false,
+          "isReadOnly": true,
+          "isStatic": false,
+          "type": "string",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "Command": {
+          "kind": "property",
+          "signature": "public static Command: string;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": true,
+          "type": "string",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "handle": {
+          "kind": "method",
+          "signature": "public abstract handle(message: CommandMessage<T>, state: R, version: number): Promise<EventMessage[]>;",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "Promise<EventMessage[]>",
+            "description": []
+          },
+          "parameters": {
+            "message": {
+              "name": "message",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "CommandMessage<T>"
+            },
+            "state": {
+              "name": "state",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "R"
+            },
+            "version": {
+              "name": "version",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "number"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        }
+      }
+    },
+    "IEventHandler": {
+      "kind": "class",
+      "extends": "",
+      "implements": "",
+      "typeParameters": [
+        "T",
+        "R"
+      ],
+      "deprecatedMessage": [],
+      "summary": [
+        {
+          "kind": "text",
+          "text": "OBS: Needed until typescript supports decorator type extensions."
+        }
+      ],
+      "remarks": [],
+      "isBeta": false,
+      "members": {
+        "_InstantiateEventHandler": {
+          "kind": "property",
+          "signature": "public static _InstantiateEventHandler: (injector: Injector) => IEventHandler<any, any>;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": true,
+          "type": "(injector: Injector) => IEventHandler<any, any>",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "_validateAndHandle": {
+          "kind": "property",
+          "signature": "public _validateAndHandle: (event: EventMessage<T>, state: R) => Promise<R>;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "(event: EventMessage<T>, state: R) => Promise<R>",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "event": {
+          "kind": "property",
+          "signature": "public readonly event: string;",
+          "isOptional": false,
+          "isReadOnly": true,
+          "isStatic": false,
+          "type": "string",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "Event": {
+          "kind": "property",
+          "signature": "public static Event: string;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": true,
+          "type": "string",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "handle": {
+          "kind": "method",
+          "signature": "public abstract handle(event: EventMessage<T>, state: R): Promise<R>;",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "Promise<R>",
+            "description": []
+          },
+          "parameters": {
+            "event": {
+              "name": "event",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "EventMessage<T>"
+            },
+            "state": {
+              "name": "state",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "R"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "Type": {
+          "kind": "property",
+          "signature": "public static Type: string;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": true,
+          "type": "string",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        }
+      }
+    },
+    "Injector": {
+      "kind": "class",
+      "extends": "",
+      "implements": "",
+      "typeParameters": [],
+      "deprecatedMessage": [],
+      "summary": [],
+      "remarks": [],
+      "isBeta": false,
+      "members": {
+        "__constructor": {
+          "kind": "constructor",
+          "signature": "constructor(parent?: Injector) {\n    this._parent = parent;\n  }",
+          "parameters": {
+            "parent": {
+              "name": "parent",
+              "description": [],
+              "isOptional": true,
+              "isSpread": false,
+              "type": "Injector"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [
+            {
+              "kind": "text",
+              "text": "Constructs a new instance of the "
+            },
+            {
+              "kind": "api-link",
+              "elements": [
+                {
+                  "kind": "text",
+                  "text": "Injector"
+                }
+              ],
+              "target": {
+                "scopeName": "@eventific",
+                "packageName": "core",
+                "exportName": "Injector",
+                "memberName": ""
+              }
+            },
+            {
+              "kind": "text",
+              "text": " class"
+            }
+          ],
+          "remarks": []
+        },
+        "args": {
+          "kind": "method",
+          "signature": "public args(type: Function, setting?: object): any[] {\n    const types = this._getTypes(type);\n    const args: any[] = [];\n    types.forEach((param) => {\n      if (param.type === SettingSymbol) {\n        args.push(setting);\n      } else {\n        if (param.required) {\n          args.push(this.get(param.type));\n        } else {\n          args.push(this.getOptional(param.type));\n        }\n      }\n\n    });\n    return args;\n  }",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "any[]",
+            "description": []
+          },
+          "parameters": {
+            "type": {
+              "name": "type",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "Function"
+            },
+            "setting": {
+              "name": "setting",
+              "description": [],
+              "isOptional": true,
+              "isSpread": false,
+              "type": "object"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "get": {
+          "kind": "method",
+          "signature": "public get<T = any>(type: string | symbol | Function): T {\n    const result = this.getOptional<T>(type);\n    if (result) {\n      return result;\n    } else {\n      throw new Error('InjectionError: No provider for type: ' + type.toString());\n    }\n  }",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "T",
+            "description": []
+          },
+          "parameters": {
+            "type": {
+              "name": "type",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "string | symbol | Function"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "getOptional": {
+          "kind": "method",
+          "signature": "public getOptional<T = any>(type: string | symbol | Function): T | undefined {\n    const key = this._getProvideKey(type);\n    const result = this._dependencies.get(key);\n    if (!result && this._parent) {\n      return this._parent.getOptional<T>(type);\n    } else if (result) {\n      if ((result as ClassDependencyDefinition).useClass) {\n        return new ((result as ClassDependencyDefinition).useClass as any)\n        (...this.args((result as ClassDependencyDefinition).useClass)) as T;\n      } else {\n        return (result as ValueDependencyDefinition).useConstant as any;\n      }\n    } else {\n      return undefined;\n    }\n  }",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "T | undefined",
+            "description": []
+          },
+          "parameters": {
+            "type": {
+              "name": "type",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "string | symbol | Function"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "newChildInjector": {
+          "kind": "method",
+          "signature": "public newChildInjector(): Injector {\n    return new Injector(this);\n  }",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "Injector",
+            "description": []
+          },
+          "parameters": {},
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "set": {
+          "kind": "method",
+          "signature": "public set(dependency: ClassDependencyDefinition | ValueDependencyDefinition | { new(...args: any[]): {} }): void {\n    if ((dependency as ClassDependencyDefinition).useClass) {\n      assert(\n        isClass((dependency as ClassDependencyDefinition).useClass),\n        'The provided class has to actually be a class'\n      );\n      if ((dependency as ClassDependencyDefinition).provide) {\n        const key = this._getProvideKey((dependency as ClassDependencyDefinition).provide);\n        this._dependencies.set(key, (dependency as ClassDependencyDefinition));\n      } else {\n        this._dependencies.set(\n          (dependency as ClassDependencyDefinition).useClass.name,\n          (dependency as ClassDependencyDefinition)\n        );\n      }\n    } else if ((dependency as ValueDependencyDefinition).useConstant) {\n      const key = this._getProvideKey((dependency as ValueDependencyDefinition).provide);\n      this._dependencies.set(key, (dependency as ValueDependencyDefinition));\n    } else {\n      assert(isClass((dependency as { new(...args: any[]): {} })), 'The provided class has to actually be a class');\n      this._dependencies.set(\n        (dependency as { new(...args: any[]): {} }).name,\n        { useClass: (dependency as { new(...args: any[]): {} }) }\n      );\n    }\n  }",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "void",
+            "description": []
+          },
+          "parameters": {
+            "dependency": {
+              "name": "dependency",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "ClassDependencyDefinition | ValueDependencyDefinition | { new(...args: any[]): {} }"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        }
+      }
+    },
+    "InternalLogger": {
+      "kind": "class",
+      "extends": "Logger",
+      "implements": "",
+      "typeParameters": [],
+      "deprecatedMessage": [],
+      "summary": [],
+      "remarks": [],
+      "isBeta": false,
+      "members": {
+        "__constructor": {
+          "kind": "constructor",
+          "signature": "constructor(\n    readonly loggerName?: string\n  ) {\n    super();\n    this.name = loggerName || '';\n  }",
+          "parameters": {
+            "loggerName": {
+              "name": "loggerName",
+              "description": [],
+              "isOptional": true,
+              "isSpread": false,
+              "type": "string"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [
+            {
+              "kind": "text",
+              "text": "Constructs a new instance of the "
+            },
+            {
+              "kind": "api-link",
+              "elements": [
+                {
+                  "kind": "text",
+                  "text": "InternalLogger"
+                }
+              ],
+              "target": {
+                "scopeName": "@eventific",
+                "packageName": "core",
+                "exportName": "InternalLogger",
+                "memberName": ""
+              }
+            },
+            {
+              "kind": "text",
+              "text": " class"
+            }
+          ],
+          "remarks": []
+        },
+        "debug": {
+          "kind": "method",
+          "signature": "public debug(message: string, ...meta: any[]): void {\n    this._doLog(chalk.green('debug'), message, meta);\n  }",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "void",
+            "description": []
+          },
+          "parameters": {
+            "message": {
+              "name": "message",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "string"
+            },
+            "meta": {
+              "name": "meta",
+              "description": [],
+              "isOptional": false,
+              "isSpread": true,
+              "type": "any[]"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "error": {
+          "kind": "method",
+          "signature": "public error(message: string, ...meta: any[]): void {\n    this._doLog(chalk.red('error'), message, meta, true);\n  }",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "void",
+            "description": []
+          },
+          "parameters": {
+            "message": {
+              "name": "message",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "string"
+            },
+            "meta": {
+              "name": "meta",
+              "description": [],
+              "isOptional": false,
+              "isSpread": true,
+              "type": "any[]"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "getNamed": {
+          "kind": "method",
+          "signature": "public getNamed(name: string): Logger {\n    return this;\n  }",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "Logger",
+            "description": []
+          },
+          "parameters": {
+            "name": {
+              "name": "name",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "string"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "info": {
+          "kind": "method",
+          "signature": "public info(message: string, ...meta: any[]): void {\n    this._doLog(chalk.cyan('info'), message, meta);\n  }",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "void",
+            "description": []
+          },
+          "parameters": {
+            "message": {
+              "name": "message",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "string"
+            },
+            "meta": {
+              "name": "meta",
+              "description": [],
+              "isOptional": false,
+              "isSpread": true,
+              "type": "any[]"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "name": {
+          "kind": "property",
+          "signature": "public readonly name: string;",
+          "isOptional": false,
+          "isReadOnly": true,
+          "isStatic": false,
+          "type": "string",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "raw": {
+          "kind": "method",
+          "signature": "public raw(message: string): void {\n    process.stdout.write(message + '\\n');\n  }",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "void",
+            "description": []
+          },
+          "parameters": {
+            "message": {
+              "name": "message",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "string"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "silly": {
+          "kind": "method",
+          "signature": "public silly(message: string, ...meta: any[]): void {\n    this._doLog(chalk.gray('silly'), message, meta);\n  }",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "void",
+            "description": []
+          },
+          "parameters": {
+            "message": {
+              "name": "message",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "string"
+            },
+            "meta": {
+              "name": "meta",
+              "description": [],
+              "isOptional": false,
+              "isSpread": true,
+              "type": "any[]"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "verbose": {
+          "kind": "method",
+          "signature": "public verbose(message: string, ...meta: any[]): void {\n    this._doLog(chalk.magenta('verbose'), message, meta);\n  }",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "void",
+            "description": []
+          },
+          "parameters": {
+            "message": {
+              "name": "message",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "string"
+            },
+            "meta": {
+              "name": "meta",
+              "description": [],
+              "isOptional": false,
+              "isSpread": true,
+              "type": "any[]"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "warn": {
+          "kind": "method",
+          "signature": "public warn(message: string, ...meta: any[]): void {\n    this._doLog(chalk.yellow('warn'), message, meta, true);\n  }",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "void",
+            "description": []
+          },
+          "parameters": {
+            "message": {
+              "name": "message",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "string"
+            },
+            "meta": {
+              "name": "meta",
+              "description": [],
+              "isOptional": false,
+              "isSpread": true,
+              "type": "any[]"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        }
+      }
+    },
+    "IStore": {
+      "kind": "class",
+      "extends": "",
+      "implements": "",
+      "typeParameters": [],
+      "deprecatedMessage": [],
+      "summary": [
+        {
+          "kind": "text",
+          "text": "A interface for event stores."
+        }
+      ],
+      "remarks": [],
+      "isBeta": false,
+      "members": {
+        "_CreateStore": {
+          "kind": "property",
+          "signature": "public static _CreateStore: (injector: Injector) => IStore;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": true,
+          "type": "(injector: Injector) => IStore",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "applyEvents": {
+          "kind": "method",
+          "signature": "public abstract applyEvents<T>(aggregateName: string, events: EventMessage[], state?: T): Promise<void>;",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "Promise<void>",
+            "description": []
+          },
+          "parameters": {
+            "aggregateName": {
+              "name": "aggregateName",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "string"
+            },
+            "events": {
+              "name": "events",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "EventMessage[]"
+            },
+            "state": {
+              "name": "state",
+              "description": [],
+              "isOptional": true,
+              "isSpread": false,
+              "type": "T"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "getEvents": {
+          "kind": "method",
+          "signature": "public abstract getEvents<T>(aggregateName: string, aggregateId: string): Promise<GetEventsResult<T>>;",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "Promise<GetEventsResult<T>>",
+            "description": []
+          },
+          "parameters": {
+            "aggregateName": {
+              "name": "aggregateName",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "string"
+            },
+            "aggregateId": {
+              "name": "aggregateId",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "string"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [
+            {
+              "kind": "text",
+              "text": "Returns the events for the particular aggregate. The result might also contain a snapshot."
+            }
+          ],
+          "remarks": [],
+          "isBeta": false
+        },
+        "onEvent": {
+          "kind": "method",
+          "signature": "public abstract onEvent(\n    aggregateName: string,\n    eventName: string | null,\n    callback: (event: EventMessage) => Promise<void>\n  ): void;",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "void",
+            "description": []
+          },
+          "parameters": {
+            "aggregateName": {
+              "name": "aggregateName",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "string"
+            },
+            "eventName": {
+              "name": "eventName",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "string | null"
+            },
+            "callback": {
+              "name": "callback",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "(event: EventMessage) => Promise<void>"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "purgeAllSnapshots": {
+          "kind": "method",
+          "signature": "public abstract purgeAllSnapshots(aggregateName: string): Promise<void>;",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "Promise<void>",
+            "description": []
+          },
+          "parameters": {
+            "aggregateName": {
+              "name": "aggregateName",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "string"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "Settings": {
+          "kind": "property",
+          "signature": "public static Settings: (settings: object) => { _CreateStore: (injector: Injector) => IStore };",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": true,
+          "type": "(settings: object) => { _CreateStore: (injector: Injector) => IStore }",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "start": {
+          "kind": "method",
+          "signature": "public abstract start(): Promise<any>;",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "Promise<any>",
+            "description": []
+          },
+          "parameters": {},
+          "deprecatedMessage": [],
+          "summary": [
+            {
+              "kind": "text",
+              "text": "Starts this event store instance"
+            }
+          ],
+          "remarks": [],
+          "isBeta": false
+        }
+      }
+    },
+    "ITransport": {
+      "kind": "class",
+      "extends": "",
+      "implements": "",
+      "typeParameters": [],
+      "deprecatedMessage": [],
+      "summary": [],
+      "remarks": [],
+      "isBeta": false,
+      "members": {
+        "_CreateTransport": {
+          "kind": "property",
+          "signature": "public static _CreateTransport: (injector: Injector) => ITransport;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": true,
+          "type": "(injector: Injector) => ITransport",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "onCommand": {
+          "kind": "method",
+          "signature": "public onCommand?(aggregateName: string, handler: (data: CommandMessage) => Promise<void>): void;",
+          "accessModifier": "public",
+          "isOptional": true,
+          "isStatic": false,
+          "returnValue": {
+            "type": "void",
+            "description": []
+          },
+          "parameters": {
+            "aggregateName": {
+              "name": "aggregateName",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "string"
+            },
+            "handler": {
+              "name": "handler",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "(data: CommandMessage) => Promise<void>"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "sendCommand": {
+          "kind": "method",
+          "signature": "public sendCommand?(aggregateName: string, data: CommandMessage): Promise<void>;",
+          "accessModifier": "public",
+          "isOptional": true,
+          "isStatic": false,
+          "returnValue": {
+            "type": "Promise<void>",
+            "description": []
+          },
+          "parameters": {
+            "aggregateName": {
+              "name": "aggregateName",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "string"
+            },
+            "data": {
+              "name": "data",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "CommandMessage"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "Settings": {
+          "kind": "property",
+          "signature": "public static Settings: (settings: object) => { _CreateTransport: (injector: Injector) => ITransport };",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": true,
+          "type": "(settings: object) => { _CreateTransport: (injector: Injector) => ITransport }",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "start": {
+          "kind": "method",
+          "signature": "public abstract start(): Promise<void>;",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "Promise<void>",
+            "description": []
+          },
+          "parameters": {},
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        }
+      }
+    },
+    "Logger": {
+      "kind": "class",
+      "extends": "",
+      "implements": "",
+      "typeParameters": [],
+      "deprecatedMessage": [],
+      "summary": [],
+      "remarks": [],
+      "isBeta": false,
+      "members": {
+        "debug": {
+          "kind": "method",
+          "signature": "public abstract debug(message: string, ...meta: any[]): void;",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "void",
+            "description": []
+          },
+          "parameters": {
+            "message": {
+              "name": "message",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "string"
+            },
+            "meta": {
+              "name": "meta",
+              "description": [],
+              "isOptional": false,
+              "isSpread": true,
+              "type": "any[]"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "error": {
+          "kind": "method",
+          "signature": "public abstract error(message: string, ...meta: any[]): void;",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "void",
+            "description": []
+          },
+          "parameters": {
+            "message": {
+              "name": "message",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "string"
+            },
+            "meta": {
+              "name": "meta",
+              "description": [],
+              "isOptional": false,
+              "isSpread": true,
+              "type": "any[]"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "getNamed": {
+          "kind": "method",
+          "signature": "public abstract getNamed(name: string): Logger;",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "Logger",
+            "description": []
+          },
+          "parameters": {
+            "name": {
+              "name": "name",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "string"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "info": {
+          "kind": "method",
+          "signature": "public abstract info(message: string, ...meta: any[]): void;",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "void",
+            "description": []
+          },
+          "parameters": {
+            "message": {
+              "name": "message",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "string"
+            },
+            "meta": {
+              "name": "meta",
+              "description": [],
+              "isOptional": false,
+              "isSpread": true,
+              "type": "any[]"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "name": {
+          "kind": "property",
+          "signature": "public readonly name: string;",
+          "isOptional": false,
+          "isReadOnly": true,
+          "isStatic": false,
+          "type": "string",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "raw": {
+          "kind": "method",
+          "signature": "public abstract raw(message: string): void;",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "void",
+            "description": []
+          },
+          "parameters": {
+            "message": {
+              "name": "message",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "string"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "silly": {
+          "kind": "method",
+          "signature": "public abstract silly(message: string, ...meta: any[]): void;",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "void",
+            "description": []
+          },
+          "parameters": {
+            "message": {
+              "name": "message",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "string"
+            },
+            "meta": {
+              "name": "meta",
+              "description": [],
+              "isOptional": false,
+              "isSpread": true,
+              "type": "any[]"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "verbose": {
+          "kind": "method",
+          "signature": "public abstract verbose(message: string, ...meta: any[]): void;",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "void",
+            "description": []
+          },
+          "parameters": {
+            "message": {
+              "name": "message",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "string"
+            },
+            "meta": {
+              "name": "meta",
+              "description": [],
+              "isOptional": false,
+              "isSpread": true,
+              "type": "any[]"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        },
+        "warn": {
+          "kind": "method",
+          "signature": "public abstract warn(message: string, ...meta: any[]): void;",
+          "accessModifier": "public",
+          "isOptional": false,
+          "isStatic": false,
+          "returnValue": {
+            "type": "void",
+            "description": []
+          },
+          "parameters": {
+            "message": {
+              "name": "message",
+              "description": [],
+              "isOptional": false,
+              "isSpread": false,
+              "type": "string"
+            },
+            "meta": {
+              "name": "meta",
+              "description": [],
+              "isOptional": false,
+              "isSpread": true,
+              "type": "any[]"
+            }
+          },
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        }
+      }
+    },
+    "StoreOptions": {
+      "kind": "interface",
+      "extends": "",
+      "implements": "",
+      "typeParameters": [],
+      "deprecatedMessage": [],
+      "summary": [],
+      "remarks": [],
+      "isBeta": false,
+      "members": {
+        "name": {
+          "kind": "property",
+          "signature": "name: string;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "string",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        }
+      }
+    },
+    "TransportOptions": {
+      "kind": "interface",
+      "extends": "",
+      "implements": "",
+      "typeParameters": [],
+      "deprecatedMessage": [],
+      "summary": [],
+      "remarks": [],
+      "isBeta": false,
+      "members": {
+        "name": {
+          "kind": "property",
+          "signature": "name: string;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "string",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": false
+        }
+      }
+    },
+    "ValueDependencyDefinition": {
+      "kind": "interface",
+      "extends": "",
+      "implements": "",
+      "typeParameters": [],
+      "deprecatedMessage": [],
+      "summary": [],
+      "remarks": [],
+      "isBeta": true,
+      "members": {
+        "provide": {
+          "kind": "property",
+          "signature": "provide: string | symbol | Function;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "string | symbol | Function",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": true
+        },
+        "useConstant": {
+          "kind": "property",
+          "signature": "useConstant: any;",
+          "isOptional": false,
+          "isReadOnly": false,
+          "isStatic": false,
+          "type": "any",
+          "deprecatedMessage": [],
+          "summary": [],
+          "remarks": [],
+          "isBeta": true
+        }
+      }
+    }
+  }
+}

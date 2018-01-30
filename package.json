@@ -1,0 +1,29 @@
+{
+  "name": "api-documenter-jekyll",
+  "version": "0.1.0",
+  "description": "A api documenter that takes input from api extractor and turns it into jekyll compatible files",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Joatin/api-documenter-jekyll.git"
+  },
+  "bin": {
+    "api-documenter-jekyll": "./bin/api-documenter-jekyll"
+  },
+  "scripts": {
+    "start": "ts-node ./src/start.ts",
+    "test": "echo test"
+  },
+  "dependencies": {
+    "@microsoft/api-extractor": "^5.2.6",
+    "@types/glob": "^5.0.35",
+    "@types/node": "^9.4.0",
+    "commander": "^2.13.0",
+    "dashify": "^1.0.0",
+    "glob": "^7.1.2",
+    "mkdirp": "^0.5.1",
+    "rimraf": "^2.6.2",
+    "ts-node": "^4.1.0",
+    "typescript": "^2.6.2"
+  }
+}

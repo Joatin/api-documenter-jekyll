@@ -1,0 +1,20 @@
+language: node_js
+sudo: false
+node_js:
+- 8.9.1
+cache:
+  yarn: true
+  directories:
+  - "./node_modules"
+install:
+- yarn
+script:
+- yarn test
+deploy:
+  provider: npm
+  email: granlundjoatin@icloud.com
+  api_key:
+    secure: aGnsKymMCYDNqBAGgABHIElZisz0i3kmtd7gdIgnLcVWT0eyALZNcJrgw81oSDRuQb3DoKAdRjrhgBi0Lsx3NRIvjZuQBeap41y5cnrAAYf6/U/X8CLBDYYdEClhpWr93sWVYIx2RdlxwtiHkkLCavtQypos2oBNWQf6PPPfm2lBeOZqBEAFH7Trtr1HwWECfyhtM26CjrY/UlIb0WsthAUsUObbXnAs7SH24IZWlKiSJei21c1zzJm42KHfmHEBPMp6ZZ7W7fe1jIyAPnpycjE+M5h9fIrHijVYceGUjKjGwdHCJqdba2QJoPsCA9I92mSbggQmWONMjkxkUhOt384DY4ZGH3esTu/atwynXy88HwxabyUAiBjZ4KHGv/LIjWcUOGHZZ9ZgmdYaO0LXTZbqpfDszPRdyOM1dRsHrEeLO09sBkxgrE0O0XBjoZ0RwdUv15yT6SDkSfcubKauXv8YfPwl8+6I7z48IDGME6xT2sMRr3Exaah0QtRspg3x2a1K1F8+jptsaqboO7BSAToC3Oaxvbp6U5yYj4RjdhZUEGcLIoOi+U4TjfSwFtsX4htJupYPNCwh8LR5ap0mx5dlBW6TCRKc7b8UfQ7Xh2D2wepGicWadgV6XoygJ0JP1eZFjIKQ3ItYEFOIUreVEPZ8G32RGS5siZFlJs+fDxI=
+  on:
+    tags: true
+    repo: Joatin/api-documenter-jekyll
